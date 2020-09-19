@@ -2,9 +2,8 @@ import arcade
 import constants as C
 
 
-class Load_images(arcade.View):
-    def __init__(self, window: arcade.Window):
-        super().__init__(window)
+class Load_images:
+    def __init__(self):
         self.images = {}
 
     def load(self, id, name_of_file):
