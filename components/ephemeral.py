@@ -1,0 +1,2 @@
+class Ephemeral:
+    pass
