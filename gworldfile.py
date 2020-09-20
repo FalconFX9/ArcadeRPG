@@ -123,8 +123,8 @@ class Gworldfile:
     def __analyse_tile(data, x, y):
         data = data.split(C.DÉF_SEP_C)
         tile = Gworldfile.TILES[data[0]]()
-        tile.x = x
-        tile.y = y
+        tile.mapx = x
+        tile.mapy = y
         type_tile = type(tile)
 
         if type_tile == TeleporterTile:

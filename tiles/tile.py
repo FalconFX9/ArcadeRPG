@@ -6,8 +6,8 @@ class Tile(ABC, arcade.Sprite):
 
     def __init__(self):
         super().__init__()
-        self.x = None
-        self.y = None
+        self.mapx = None
+        self.mapy = None
         self.variant = None
 
     def actualise(self, state):

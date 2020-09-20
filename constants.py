@@ -13,7 +13,7 @@ def resource_path(relative_path):
 
 TITLE = 'Mon jeu'
 WIDTH = 640 #704
-HEIGHT = 490#544
+HEIGHT = 480#544
 DRAW_BACKGROUND = (255, 255, 255)
 DT = 1/120
 RESOURCES = resource_path('resources/')

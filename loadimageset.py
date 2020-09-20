@@ -20,7 +20,7 @@ class LoadImageSet:
             for image_x in range(0, int(img_x / width)):
                 locations.append((image_x * width, image_y * height, width, height))
         images = arcade.load_textures(C.RESOURCES + image_set, locations)
-        return images, locations
+        return images
 
     @staticmethod
     def __load_2d(spritesheet, sp_width, sp_height, columns, count, margin=0):

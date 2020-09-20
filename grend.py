@@ -68,6 +68,7 @@ class Map(arcade.View):
         self.state = state
         self.prev_coords = {}
         self.tiles = None
+        self.tiles2 = None
         self.entities = None
         self.gstate = None
 
@@ -125,7 +126,9 @@ class Map(arcade.View):
 
     def setup(self):
         self.tiles = arcade.SpriteList()
+        self.tiles2 = arcade.SpriteList()
         self.entities = arcade.SpriteList()
+        self.on_level_change()
 
     def on_level_change(self):
         position = self.state.player.get_component(Position)
@@ -134,16 +137,17 @@ class Map(arcade.View):
         for y in range(position.level.h - 1):
             for x in range(position.level.l):
                 tile = position.level.map1[x][y]
-                tile.x *= C.TILE_SIZE
-                tile.y *= C.TILE_SIZE
                 tile.texture = self.image_loader.obtain_tile(int(tile.variant))
+                tile.center_x = (tile.mapx * C.TILE_SIZE - (C.TILE_SIZE // 2))
+                tile.center_y = (C.HEIGHT + C.TILE_SIZE//2) - tile.mapy * C.TILE_SIZE
                 self.tiles.append(tile)
                 tile = position.level.map2[x][y]
                 if tile:
-                    tile.x *= C.TILE_SIZE
-                    tile.y *= C.TILE_SIZE
+                    print(tile.mapx, tile.mapy)
                     tile.texture = self.image_loader.obtain_tile(int(tile.variant))
-                    self.tiles.append(tile)
+                    tile.center_x = tile.mapx * C.TILE_SIZE - C.TILE_SIZE + 16
+                    tile.center_y = C.HEIGHT - (tile.mapy * C.TILE_SIZE) + 16
+                    self.tiles2.append(tile)
 
     def on_update(self, delta_time: float):
         interpolation = delta_time / C.DT
@@ -154,7 +158,6 @@ class Map(arcade.View):
             sprite = entity.get_component(Sprite)
             mouvement = entity.get_component(GridMovement)
 
-            # Seulement dessiner les entités avec un position et un sprite.
             if not position or not sprite or position.level != level:
                 continue
 
@@ -213,5 +216,6 @@ class Map(arcade.View):
     def on_draw(self):
         arcade.start_render()
         self.tiles.draw()
+        self.tiles2.draw()
         self.entities.draw()
 
