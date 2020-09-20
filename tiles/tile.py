@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
+import arcade
 
 
-class Tile(ABC):
+class Tile(ABC, arcade.Sprite):
 
     def __init__(self):
+        super().__init__()
         self.x = None
         self.y = None
         self.color = None
