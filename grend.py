@@ -210,8 +210,8 @@ class Map(arcade.View):
                 for entity_2 in self.state.entities:
                     if level == entity_2.get_component(Position).level:
                         self.entities.append(arcade.Sprite())
-            self.entities[counter].center_x = pos[0] + 16
-            self.entities[counter].center_y = pos[1] + 16
+            self.entities[counter].center_x = pos[0] - 16
+            self.entities[counter].center_y = C.HEIGHT - pos[1] + 16
             self.entities[counter].texture = img
 
             self.prev_coords[entity] = x, y
