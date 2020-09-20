@@ -19,11 +19,8 @@ class GameState:
 
     def __init__(self):
         self.dt = C.DT
-        self.state = C.ÉTAT_NIVEAU
+        self.state = C.LEVEL_STATE
         self.entity_factory = None
-
-        self.carré_débogage_pos = 0
-        self.mode_débogage = False
 
         self.levels = None
         self.player = None
