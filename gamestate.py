@@ -1,6 +1,4 @@
-
-import constantes as C
-from boutton import Boutton
+import constants as C
 from components.controllable import Controllable
 from components.gridmouvement import GridMouvement
 from components.orientable import Orientable
