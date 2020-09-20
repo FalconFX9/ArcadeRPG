@@ -131,6 +131,8 @@ class Map(arcade.View):
         self.on_level_change()
 
     def on_level_change(self):
+        for entity in self.state.entities:
+            self.entities.append(arcade.Sprite())
         position = self.state.player.get_component(Position)
         if not position:
             return
@@ -143,7 +145,6 @@ class Map(arcade.View):
                 self.tiles.append(tile)
                 tile = position.level.map2[x][y]
                 if tile:
-                    print(tile.mapx, tile.mapy)
                     tile.texture = self.image_loader.obtain_tile(int(tile.variant))
                     tile.center_x = tile.mapx * C.TILE_SIZE - C.TILE_SIZE + 16
                     tile.center_y = C.HEIGHT - (tile.mapy * C.TILE_SIZE) + 16
@@ -153,7 +154,7 @@ class Map(arcade.View):
         interpolation = delta_time / C.DT
         level = self.state.player.get_component(Position).level
 
-        for entity in self.state.entities:
+        for num, entity in enumerate(self.state.entities):
             position = entity.get_component(Position)
             sprite = entity.get_component(Sprite)
             mouvement = entity.get_component(GridMovement)
@@ -202,12 +203,13 @@ class Map(arcade.View):
                     int((y + 0.5) * C.TILE_SIZE - 0.5 * h)
                 )
 
-            # Dessine l'image.
-            entity = arcade.Sprite()
-            entity.center_x = pos[0] + 16
-            entity.center_y = pos[1] + 16
-            entity.texture = img
-            self.entities.append(entity)
+            if len(self.entities) > len(self.state.entities):
+                self.entities = arcade.SpriteList()
+                for n in self.state.entities:
+                    self.entities.append(entity)
+            self.entities[num].center_x = pos[0] + 16
+            self.entities[num].center_y = pos[1] + 16
+            self.entities[num].texture = img
 
             self.prev_coords[entity] = x, y
 
