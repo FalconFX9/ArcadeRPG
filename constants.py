@@ -34,7 +34,7 @@ VICTORY_STATE = 4
 MENU_STATE = 5
 GAME_END = 6
 
-DÉF_MONDE_SOURCE = RESOURCES + 'monde.def'
+WOLRD_SOURCE = RESOURCES + 'monde.megachonk'
 DÉF_SEP_B = ' '
 DÉF_SEP_C = ';'
 LEVEL_TAG = 'level'

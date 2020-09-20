@@ -1,6 +1,6 @@
 import constants as C
 from components.controllable import Controllable
-from components.gridmouvement import GridMouvement
+from components.gridmouvement import GridMovement
 from components.orientable import Orientable
 from components.position import Position
 from components.player import Player
@@ -11,6 +11,7 @@ from components.dialogue import Dialogue
 from components.merchant import Merchant
 from components.initiatecombat import InitiateCombat
 from components.stats import Stats
+from components.inventory import Inventory
 from time import time
 import random
 import pickle

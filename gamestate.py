@@ -1,8 +1,7 @@
 
-import constantes as C
-from boutton import Boutton
+import constants as C
 from components.controllable import Controllable
-from components.gridmouvement import GridMouvement
+from components.gridmouvement import GridMovement
 from components.orientable import Orientable
 from components.position import Position
 from components.player import Player
@@ -21,11 +20,8 @@ class GameState:
 
     def __init__(self):
         self.dt = C.DT
-        self.state = C.ÉTAT_NIVEAU
+        self.state = C.LEVEL_STATE
         self.entity_factory = None
-
-        self.carré_débogage_pos = 0
-        self.mode_débogage = False
 
         self.levels = None
         self.player = None
@@ -41,7 +37,6 @@ class GameState:
         self.image_loader = None
 
         self.init_levels = None
-        self.create_buttons()
 
     def create_buttons(self):
         self.bouttons['Attaque'] = Boutton(34, 242, 106, 30, 'Attaque', (255, 255, 255, 0), (255, 255, 255, 128))

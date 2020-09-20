@@ -1,4 +1,4 @@
-class GridMouvement:
+class GridMovement:
 
     def __init__(self, price):
         self.price = price

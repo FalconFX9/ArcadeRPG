@@ -8,8 +8,8 @@ class ChestTile(Tile):
         self.items = []
         self.open = False
 
-    def peut_entrer(self, entity):
+    def can_enter(self, character):
         return False
 
-    def sur_interaction(self, state, entity):
+    def on_interact(self, state, entity):
         pass

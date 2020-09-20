@@ -5,7 +5,14 @@ from level import Level
 class Gworldfile:
 
     TILES = {'0': TerrainTile,
-             '2': WallTile,}
+              '2': WallTile,
+              '3': WaterTile,
+              '5': SandTile,
+              '6': TeleporterTile,
+              '8': LeverTile,
+              'b': SwitchingTile,
+              'c': ChestTile
+              }
 
     @staticmethod
     def __load_file(file):

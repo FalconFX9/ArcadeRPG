@@ -2,6 +2,21 @@ import arcade
 import constants as C
 from arcade.gui import UIManager, UIFlatButton
 from loadimageset import LoadImageSet
+from components.controllable import Controllable
+from components.gridmouvement import GridMovement
+from components.orientable import Orientable
+from components.position import Position
+from components.player import Player
+from components.loopedai import LoopedAi
+from components.randomai import RandomAi
+from components.ephemeral import Ephemeral
+from components.dialogue import Dialogue
+from components.merchant import Merchant
+from components.initiatecombat import InitiateCombat
+from components.stats import Stats
+from components.inventory import Inventory
+from components.sprite import Sprite
+from components.alignedbox import AlignedBox
 
 
 class Menu(arcade.View):
@@ -46,12 +61,13 @@ class Menu(arcade.View):
 
 class Map(arcade.View):
 
-    def __init__(self, state, window: arcade.Window):
+    def __init__(self, state, gstate, window: arcade.Window):
         super().__init__(window)
         self.state = state
         self.prev_coords = {}
         self.tiles = None
         self.entities = None
+        self.gstate = gstate
 
         self.image_loader = LoadImageSet()
         self.image_loader.load_tiles('tileset.png', 32, 32)
@@ -140,6 +156,8 @@ class Map(arcade.View):
             self.entities.append(entity)
 
             self.prev_coords[entity] = x, y
+
+            self.gstate.update()
 
     def on_draw(self):
         arcade.start_render()
