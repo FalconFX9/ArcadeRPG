@@ -50,7 +50,7 @@ class CombatMechanic:
 
     def calculate_XP(self):
         XP_gain = 0
-        for entity in self.state.entité_lance_combat.obtient_composant(InitiateCombat).entités_combat.values(): # ---------------------- change here
+        for entity in self.state.combat_launch_entities.obtain_component(InitiateCombat).combat_entities.values():
             level = entity.obtient_composant(Stats).level
             XP_gain += C.XP_GAIN[entity.id] * (1 + (level / 5))
         return XP_gain
@@ -70,10 +70,10 @@ class CombatMechanic:
                 stats_joueur.XP += self.calculate_XP()
                 if stats_joueur.vérifie_niveau():
                     self.state.joueur.obtient_composant(Inventory).vérifie_stats()
-                self.state.entités_détruites.append(self.state.entité_lance_combat.id)
-                if 'Boss' in self.state.entité_lance_combat.id:
+                self.state.entités_détruites.append(self.state.combat_launch_entities.id)
+                if 'Boss' in self.state.combat_launch_entities.id:
                     self.state.state = C.GAME_END
-                self.state.entités.remove(self.state.entité_lance_combat)
+                self.state.entités.remove(self.state.combat_launch_entities)
                 self.state.joueur.obtient_composant(Controllable).force = None
                 self.flee = False
         elif self.state.bouttons['Flee'].cliqué:
@@ -139,8 +139,8 @@ class CombatMechanic:
             self.check_selected_enemy()
             self.player_turn()
         else:
-            enemies_num = len(self.state.entité_lance_combat.obtain_component(InitiateCombat).entités_combat.values()) # what is entité_lance_combat?
-            if 'Boss' not in self.state.entité_lance_combat.id:
+            enemies_num = len(self.state.combat_launch_entities.obtain_component(InitiateCombat).combat_entities.values())
+            if 'Boss' not in self.state.combat_launch_entities.id:
                 if self.counter in self.enemies.keys():
                     self.enemy_turn(self.counter)
                 else:
