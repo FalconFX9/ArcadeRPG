@@ -1,17 +1,7 @@
 import arcade
-import sys
-import os
 import constants as C
 from arcade.gui import UIManager, UIFlatButton
-
-
-def resource_path(relative_path):
-    try:
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)
+from loadimageset import LoadImageSet
 
 
 class Menu(arcade.View):
@@ -24,7 +14,7 @@ class Menu(arcade.View):
         self.ui_manager = UIManager(self.window)
 
     def setup(self):
-        self.background_img = arcade.load_texture(resource_path(C.RESOURCES + 'Backgrounds/Menu.png'))
+        self.background_img = arcade.load_texture(C.RESOURCES + 'Backgrounds/Menu.png')
         self.ui_manager.purge_ui_elements()
 
         start = UIFlatButton('PLAY', self.window.width // 2, self.window.height // 2 - 115, 200, 125)
