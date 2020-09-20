@@ -204,8 +204,8 @@ class Map(arcade.View):
 
             # Dessine l'image.
             entity = arcade.Sprite()
-            entity.x = pos[0]
-            entity.y = pos[1]
+            entity.center_x = pos[0] + 16
+            entity.center_y = pos[1] + 16
             entity.texture = img
             self.entities.append(entity)
 
