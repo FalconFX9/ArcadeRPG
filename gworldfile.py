@@ -115,7 +115,7 @@ class Gworldfile:
     @staticmethod
     def __analyse_tile(data, x, y):
         data = data.split(C.DÉF_SEP_C)
-        tile = Gworldfile.tile[data[0]]()
+        tile = Gworldfile.TILES[data[0]]()
         tile.x = x
         tile.y = y
         type_tile = type(tile)
