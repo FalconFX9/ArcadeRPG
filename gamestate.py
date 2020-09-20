@@ -101,7 +101,6 @@ class GameState:
             return not position or not position.level or entity.contains_component(Player) or entity.contains_component(Ephemeral)
 
         self.entities = list(filter(positioned_enj, self.entities))
-        print(level.id, level.entities_init)
         for data in level.entities_init:
             if 'ephemeral' not in data.keys() or ('ephemeral' in data.keys() and init):
                 entity_type = data['type']

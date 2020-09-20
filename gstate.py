@@ -56,6 +56,7 @@ class GState:
             stats.XP = saved_states.XP
             stats.HP = saved_states.HP
 
+        print(level_init.entities_init)
         self.state.move_entity(self.state.player, level_init, cx, cy)
         self.time = time()
 
@@ -111,8 +112,8 @@ class GState:
                 if tuile and self.__can_enter(position.level, tuile, entity):
                     movement.sx = position.x
                     movement.sy = position.y
-                    movement.cx = tuile.x
-                    movement.cy = tuile.y
+                    movement.cx = tuile.mapx
+                    movement.cy = tuile.mapy
 
                     movement.reload = movement.cost
 
@@ -243,10 +244,10 @@ class GState:
             mvt = e.get_component(GridMovement)
             if mvt:
                 if mvt.reload is not None:
-                    if (mvt.sx == tile.x and mvt.sy == tile.y
-                        or mvt.cx == tile.x and mvt.cy == tile.y):
+                    if (mvt.sx == tile.mapx and mvt.sy == tile.mapy
+                        or mvt.cx == tile.mapx and mvt.cy == tile.mapy):
                         return False
-                elif pn and pn.x == tile.x and pn.y == tile.y:
+                elif pn and pn.x == tile.mapx and pn.y == tile.mapy:
                     return False
 
         return True
@@ -264,7 +265,7 @@ class GState:
 
             for j in range(i + 1, no_entities):
                 e2 = entities[j]
-                collider2 = e2.obtient_composant(Collider)
+                collider2 = e2.get_component(Collider)
 
                 if not collider1 and not collider2:
                     continue

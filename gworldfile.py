@@ -182,10 +182,8 @@ class Gworldfile:
                 break
             elif tag == C.ENTITY_TAG:
                 entity = Gworldfile.__analyse_entities(lines)
-                level.init_entities.append(entity)
+                level.entities_init.append(entity)
             else:
-                print(lines)
-                print(tag)
                 lines.pop(i - 1)
             i += 1
         level.map = list(level.map1)
@@ -257,15 +255,15 @@ class Gworldfile:
                 data['position'], data['position_coords'] = Gworldfile.__analyse_position(
                     lines)
             elif tag == C.DÉF_BALISE_AUTONOMIE_BOUCLÉE:
-                data['autonomie_bouclée'] = Gworldfile.__analyse_autonomie_bouclée(
+                data['looped_ai'] = Gworldfile.__analyse_autonomie_bouclée(
                     lines)
             elif tag == C.DÉF_BALISE_AUTONOMIE_CIBLÉE:
                 lines.pop(0)
-                data['autonomie_ciblée'] = True
+                data['random_ai'] = True
             elif tag == C.EPHEMERAL_TAG:
                 line = lines.pop(0)
                 id = line.split()
-                data['ephemere'] = id[1]
+                data['ephemeral'] = id[1]
             elif tag == C.DIALOGUE_TAG:
                 line = lines.pop(0)
                 dialogue = line.split(C.DÉF_SEP_C)

@@ -131,8 +131,10 @@ class Map(arcade.View):
         self.on_level_change()
 
     def on_level_change(self):
-        for entity in self.state.entities:
-            self.entities.append(arcade.Sprite())
+        level = self.state.player.get_component(Position).level
+        for entity_2 in self.state.entities:
+            if level == entity_2.get_component(Position).level:
+                self.entities.append(arcade.Sprite())
         position = self.state.player.get_component(Position)
         if not position:
             return
@@ -153,7 +155,7 @@ class Map(arcade.View):
     def on_update(self, delta_time: float):
         interpolation = delta_time / C.DT
         level = self.state.player.get_component(Position).level
-
+        counter = 0
         for num, entity in enumerate(self.state.entities):
             position = entity.get_component(Position)
             sprite = entity.get_component(Sprite)
@@ -205,15 +207,17 @@ class Map(arcade.View):
 
             if len(self.entities) > len(self.state.entities):
                 self.entities = arcade.SpriteList()
-                for n in self.state.entities:
-                    self.entities.append(entity)
-            self.entities[num].center_x = pos[0] + 16
-            self.entities[num].center_y = pos[1] + 16
-            self.entities[num].texture = img
+                for entity_2 in self.state.entities:
+                    if level == entity_2.get_component(Position).level:
+                        self.entities.append(arcade.Sprite())
+            self.entities[counter].center_x = pos[0] + 16
+            self.entities[counter].center_y = pos[1] + 16
+            self.entities[counter].texture = img
 
             self.prev_coords[entity] = x, y
 
             self.gstate.update()
+            counter += 1
 
     def on_draw(self):
         arcade.start_render()

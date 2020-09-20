@@ -1,7 +1,7 @@
 class GridMovement:
 
-    def __init__(self, price):
-        self.price = price
+    def __init__(self, cost):
+        self.cost = cost
         self.sx = None
         self.sy = None
         self.cx = None

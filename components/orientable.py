@@ -1,8 +1,8 @@
 class Orientable:
 
-    def __init__(self, orientation, price):
+    def __init__(self, orientation, cost):
         self.orientation = orientation
-        self.price = price
+        self.cost = cost
         self.reload = None
 
     def stop(self):

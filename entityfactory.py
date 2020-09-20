@@ -102,7 +102,7 @@ class EntityFactory:
 
     def create_black_ghost(self):
         return Entity('BlackGhost').add_component(
-            Combat(self.load_combat_images.obtiens('BlackGhost')),
+            Combat(self.load_combat_images.obtain('BlackGhost')),
             Stats(20, (0.05, 7, 3, 1)),
             Position(None, None, None),
             AlignedBox(-0.5, -0.5, 0.5, 0.5),
@@ -232,43 +232,42 @@ class EntityFactory:
                 lambda e: True})
         )
 
-    def crée_diable(self):
-        return Entity('Diable').add_component(
-            Combat(self.load_combat_images.obtiens('Diable')),
+    def create_devil(self):
+        sprite_img = self.load_combat_images.obtain('Devil')
+        sprite_img.width = 32
+        sprite_img.height = 32
+        return Entity('Devil').add_component(
+            Combat(self.load_combat_images.obtain('Devil')),
             Stats(20, (0.2, 0, 2, 1)),
             Position(None, None, None),
             AlignedBox(-0.5, -0.5, 0.5, 0.5),
             GridMovement(C.PLAYER_WALK_RELOAD),
             Orientable(C.DIRECTION_E, C.PLAYER_WALK_RELOAD),
             Sprite({
-                pygame.transform.scale(self.load_combat_images.obtiens('Diable'), (32, 32)):
+                sprite_img:
                 lambda e: e.get_component(
                     Orientable).orientation == C.DIRECTION_N,
-                pygame.transform.scale(self.load_combat_images.obtiens('Diable'), (32, 32)):
+                sprite_img:
                 lambda e: e.get_component(
                     Orientable).orientation == C.DIRECTION_O,
-                pygame.transform.scale(self.load_combat_images.obtiens('Diable'), (32, 32)):
+                sprite_img:
                 lambda e: e.get_component(
                     Orientable).orientation == C.DIRECTION_S,
-                pygame.transform.scale(self.load_combat_images.obtiens('Diable'), (32, 32)):
+                sprite_img:
                 lambda e: True})
         )
 
-    def crée_boss(self):
-        def en_collision(état, e1, e2):
+    def create_boss(self):
+        def en_collision(state, e1, e2):
             if e2.contient_composant(Player):
                 combat = e1.get_component(InitiateCombat)
-                self.state.Entity_lance_combat = e1
-                combat.sur_interaction(self.state)
-                self.combat_mechanic.ennemis[1] = copy.copy(e1.get_component(InitiateCombat).Entitys_combat[0])
+                state.Entity_lance_combat = e1
+                combat.sur_interaction(state)
+                self.combat_mechanic.ennemis[1] = copy.copy(e1.get_component(InitiateCombat).entities_combat[0])
                 self.combat_mechanic.ennemis[1].get_component(Stats).réinit_HP()
-                pygame.mixer.music.stop()
-                musique_choisie = 'demens.mp3'
-                pygame.mixer.music.load('ressources\\Musique\\' + musique_choisie)
-                pygame.mixer.music.play(-1)
 
         return Entity('Boss').add_component(
-            Combat(self.load_combat_images.obtiens('Boss')),
+            Combat(self.load_combat_images.obtain('Boss')),
             Stats(10, (4, 8, 3, 1)),
             Position(None, None, None),
             AlignedBox(-4.5, -4.5, 4.5, 4.5),
