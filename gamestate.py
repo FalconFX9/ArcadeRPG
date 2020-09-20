@@ -1,4 +1,3 @@
-
 import constants as C
 from components.controllable import Controllable
 from components.gridmouvement import GridMovement
@@ -12,6 +11,7 @@ from components.dialogue import Dialogue
 from components.merchant import Merchant
 from components.initiatecombat import InitiateCombat
 from components.stats import Stats
+from entityfactory import EntityFactory
 import random
 import copy
 
@@ -59,6 +59,8 @@ class GameState:
             y = random.randint(y1, y2)
         elif mode == C.INITIAL_PLAYER_TILE:
             x, y = random.choice(coords)
+        else:
+            x, y = 10, 8
 
         return x, y
 
@@ -72,7 +74,7 @@ class GameState:
         if not position:
             return None, None
 
-        movement = entity.get_component(GridMouvement)
+        movement = entity.get_component(GridMovement)
         if movement and movement.reload is not None:
             interp_mvt = min(1 - (movement.reload - movement.speed * interpolation) / movement.cost, 1)
 
@@ -82,7 +84,7 @@ class GameState:
         return position.x, position.y
 
     def in_movement(self, entity):
-        movement = entity.get_component(GridMouvement)
+        movement = entity.get_component(GridMovement)
         if movement and movement.reload is not None:
             return True
 
@@ -99,8 +101,8 @@ class GameState:
             return not position or not position.level or entity.contains_component(Player) or entity.contains_component(Ephemeral)
 
         self.entities = list(filter(positioned_enj, self.entities))
-
-        for data in level.entités_init:
+        print(level.id, level.entities_init)
+        for data in level.entities_init:
             if 'ephemeral' not in data.keys() or ('ephemeral' in data.keys() and init):
                 entity_type = data['type']
                 entity = self.entity_factory.create(entity_type)
@@ -182,7 +184,7 @@ class GameState:
 
             cx, cy = self.calculate_start_position(level.player_init, level.player_init_coords)
 
-        movement = entity.get_component(GridMouvement)
+        movement = entity.get_component(GridMovement)
         if movement:
             movement.stop()
 

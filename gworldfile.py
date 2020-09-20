@@ -184,6 +184,8 @@ class Gworldfile:
                 entity = Gworldfile.__analyse_entities(lines)
                 level.init_entities.append(entity)
             else:
+                print(lines)
+                print(tag)
                 lines.pop(i - 1)
             i += 1
         level.map = list(level.map1)

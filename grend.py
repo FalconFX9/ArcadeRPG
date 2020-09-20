@@ -2,6 +2,7 @@ import arcade
 import constants as C
 from arcade.gui import UIManager, UIFlatButton
 from loadimageset import LoadImageSet
+from loadimages import LoadImages
 from components.controllable import Controllable
 from components.gridmouvement import GridMovement
 from components.orientable import Orientable
@@ -17,6 +18,7 @@ from components.stats import Stats
 from components.inventory import Inventory
 from components.sprite import Sprite
 from components.alignedbox import AlignedBox
+from entityfactory import EntityFactory
 
 
 class Menu(arcade.View):
@@ -61,16 +63,65 @@ class Menu(arcade.View):
 
 class Map(arcade.View):
 
-    def __init__(self, state, gstate, window: arcade.Window):
+    def __init__(self, state, window: arcade.Window):
         super().__init__(window)
         self.state = state
         self.prev_coords = {}
         self.tiles = None
         self.entities = None
-        self.gstate = gstate
+        self.gstate = None
+
+        self.state.image_loader = LoadImages()
+        self.state.image_loader.load('Target', 'GraphicalInterface/Crosshair.png')
+        self.state.image_loader.load('TargetTr', 'GraphicalInterface/CrosshairTransparency.png')
+        self.state.image_loader.load('Menu1', 'GraphicalInterface/AttackMenu.png')
+        self.state.image_loader.load('Dialogue', 'GraphicalInterface/DialogueEtendu.png')
+        self.state.image_loader.load('Combat_player', 'Entities/BigSoldier.png')
+        self.state.image_loader.load('Attacked_player', 'Entities/BigSoldierDmg.png')
+        self.state.image_loader.load('Bat', 'Entities/pipo-enemy001.png')
+        self.state.image_loader.load('BlackGhost', 'Entities/pipo-enemy010b.png')
+        self.state.image_loader.load('SkelSoldier', 'Entities/pipo-enemy026.png')
+        self.state.image_loader.load('BlueOrb', 'Entities/pipo-enemy012a.png')
+        self.state.image_loader.load('DarkSoldier', 'Entities/pipo-enemy018b.png')
+        self.state.image_loader.load('Skeleton', 'Entities/pipo-enemy039.png')
+        self.state.image_loader.load('Devil', 'Entities/pipo-enemy040.png')
+        self.state.image_loader.load('Wolf', 'Entities/pipo-enemy002a.png')
+        self.state.image_loader.load('Boss', 'Entities/pipo-boss002.png')
+
+        self.state.image_loader.resize('Target', 48, 48)
+        self.state.image_loader.resize('TargetTr', 48, 48)
+        self.state.image_loader.resize('Combat_player', 92, 128)
+        self.state.image_loader.resize('Attacked_player', 92, 128)
+        self.state.image_loader.resize('Bat', 320, 320)
+        self.state.image_loader.resize('BlackGhost', 260, 260)
+        self.state.image_loader.resize('SkelSoldier', 160, 160)
+        self.state.image_loader.resize('BlueOrb', 280, 280)
+        self.state.image_loader.resize('DarkSoldier', 160, 160)
+        self.state.image_loader.resize('Skeleton', 160, 160)
+        self.state.image_loader.resize('Devil', 200, 200)
+        self.state.image_loader.resize('Wolf', 180, 180)
+        self.state.image_loader.resize('Boss', 426, 200)
+
+        image_loader = LoadImageSet()
+        image_loader.load_entities('Player', 'Entities/Soldier 01-1.png', 32, 32, 3, 12)
+        image_loader.load_entities('Mr Chad', 'Entities/Male 01-1.png', 32, 32, 3, 12)
+        image_loader.load_entities('NPC Intro', 'Entities/Male 04-1.png', 32, 32, 3, 12)
+        image_loader.load_entities('BlackGhost', 'Entities/Enemy 15-1.png', 32, 32, 3, 12)
+        image_loader.load_entities('SkelSoldier', 'Entities/Enemy 04-1.png', 32, 32, 3, 12)
+        image_loader.load_entities('BlueOrb', 'Entities/Enemy 16-5.png', 32, 32, 3, 12)
+        image_loader.load_entities('DarkSoldier', 'Entities/Enemy 05-1.png', 32, 32, 3, 12)
+        image_loader.load_entities('Skeleton', 'Entities/Enemy 06-1.png', 32, 32, 3, 12)
+        image_loader.load_entities('Wolf', 'Entities/Dog 01-3.png', 32, 32, 3, 12)
+        image_loader.load_entities('Boss', 'Entities/Boss 01.png', 288, 288, 3, 12)
+        self.state.entity_factory = EntityFactory(self.state, image_loader, self.state.image_loader)
 
         self.image_loader = LoadImageSet()
         self.image_loader.load_tiles('tileset.png', 32, 32)
+        self.image_loader.load_items('roguelikeitems.png', 16, 16)
+        self.image_loader.load_animations('Guérir', 'heal_003.png', 192, 192)
+
+    def on_show_view(self):
+        self.setup()
 
     def setup(self):
         self.tiles = arcade.SpriteList()
@@ -96,12 +147,12 @@ class Map(arcade.View):
 
     def on_update(self, delta_time: float):
         interpolation = delta_time / C.DT
-        level = self.state.player.obtient_composant(Position).level
+        level = self.state.player.get_component(Position).level
 
         for entity in self.state.entities:
-            position = entity.obtient_composant(Position)
-            sprite = entity.obtient_composant(Sprite)
-            mouvement = entity.obtient_composant(GridMovement)
+            position = entity.get_component(Position)
+            sprite = entity.get_component(Sprite)
+            mouvement = entity.get_component(GridMovement)
 
             # Seulement dessiner les entités avec un position et un sprite.
             if not position or not sprite or position.level != level:
@@ -132,10 +183,10 @@ class Map(arcade.View):
 
             # Détermine la position en pixels.
             if self.state.state != C.PAUSE_STATE:
-                x, y = self.state.calcule_position(entity, interpolation)
+                x, y = self.state.calculate_position(entity, interpolation)
             else:
                 x, y = self.prev_coords[entity]
-            box = entity.obtient_composant(AlignedBox)
+            box = entity.get_component(AlignedBox)
             if box:
                 pos = (
                     int((x + box.minx + 0.5) * C.TILE_SIZE),

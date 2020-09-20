@@ -206,15 +206,15 @@ map2
 -1 2;972 2;1030 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 2;1186 2;1187 -1
 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 /map
-entity soldat_squelette
+entity skeletal_soldier
 position tiles 15;6
 ephemeral 9
-combat soldat_squelette;7 chauve_souris;8 chauve_souris;8 soldat_squelette;7
+combat skeletal_soldier;7 bat;8 bat;8 skeletal_soldier;7
 /entity
-entity diable
+entity devil
 position tiles 4;10
 ephemeral 2
-combat diable;8 diable;8
+combat devil;8 devil;8
 /entity
 /level
 level 1 1
@@ -256,16 +256,16 @@ map2
 -1 -1 2;904 2;905 2;906 2;907 2;1074 2;1075 -1 -1 -1 -1 -1 -1 -1 2;568 -1 -1 -1 2;919 -1 -1
 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 /map
-entity fantome_noir
+entity black_ghost
 position tiles 5;3
 looped_ai 5;3 13;3
-combat fantome_noir;8 soldat_squelette;7 orbe_bleue;7 fantome_noir;8
+combat black_ghost;8 skeletal_soldier;7 blue_orb;7 black_ghost;8
 ephemeral 8
 /entity
-entity loup
+entity wolf
 position tiles 6;11
 looped_ai 6;11 11;11
-combat loup;7 loup;5
+combat wolf;7 wolf;5
 /entity
 /level
 level 2 1
@@ -391,10 +391,10 @@ map2
 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 2;512 2;514 -1 2;1018 -1
 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 /map
-entity loup
+entity wolf
 position tiles 4;3
 looped_ai 4;3 6;3 6;5 4;5
-combat loup;4 loup;3 loup;3
+combat wolf;4 wolf;3 wolf;3
 /entity
 /level
 level 1 2
@@ -436,10 +436,10 @@ map2
 -1 -1 -1 -1 -1 2;1016 -1 -1 -1 -1 -1 -1 2;513 -1 -1 -1 -1 -1 -1 -1 -1 -1
 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 /map
-entity loup
+entity wolf
 position tiles 14;7
 looped_ai 14;7 15;7
-combat loup;4 chauve_souris;5 squelette;6
+combat wolf;4 bat;5 skeleton;6
 ephemeral 4
 /entity
 /level
@@ -482,11 +482,11 @@ map2
 -1 -1 0;400 2;458 -1 2;515 -1 -1 -1 -1 2;1017 -1 -1 -1 0;401 -1 -1 -1 2;457 0;400 -1 -1
 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 /map
-entity soldat_sombre
+entity dark_soldier
 position tiles 13;7
 looped_ai 13;7 13;6
 ephemeral 5
-combat soldat_sombre;5 fantome_noir;5 diable;5 loup;4
+combat dark_soldier;5 black_ghost;5 devil;5 wolf;4
 /entity
 /level
 level 3 2
@@ -528,17 +528,17 @@ map2
 -1 -1 -1 0;401 -1 -1 -1 -1 -1 -1 -1 2;458 -1 -1 -1 -1 -1 2;456 -1 -1 -1 -1
 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 /map
-entity soldat_squelette
+entity skeletal_soldier
 position tiles 7;9
 looped_ai 7;9 7;11 9;11 7;11
 ephemeral 6
-combat soldat_squelette;5 orbe_bleue;7 soldat_squelette;5
+combat skeletal_soldier;5 blue_orb;7 skeletal_soldier;5
 /entity
-entity loup
+entity wolf
 position tiles 14;7
 looped_ai 14;7 15;7 15;5 17;5 15;5 15;7
 ephemeral 7
-combat loup;10
+combat wolf;10
 /entity
 /level
 level 0 3
@@ -580,10 +580,10 @@ map2
 -1 -1 0;629 2;1078 0;631 0;685 2;1020 -1 0;631 -1 2;1078 2;1079 0;686 -1 -1 0;631 0;685 2;1079 2;1078 0;629 -1 -1
 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 /map
-entity squelette
+entity skeleton
 position tiles 16;5
 looped_ai 16;5 16;8
-combat squelette;3 squelette;3
+combat skeleton;3 skeleton;3
 /entity
 /level
 level 1 3
@@ -625,9 +625,9 @@ map2
 -1 0;687 2;1078 0;685 0;685 0;630 0;629 0;687 2;1078 2;1079 0;686 0;629 0;685 0;900 -1 -1 -1 -1 -1 -1 -1 -1
 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 /map
-entity soldat_sombre
+entity dark_soldier
 position tiles 16;5
-combat soldat_sombre;7
+combat dark_soldier;7
 /entity
 /level
 level 2 3
@@ -669,14 +669,14 @@ map2
 -1 2;1079 0;630 0;686 0;687 0;685 0;687 0;687 0;687 2;1078 2;1079 0;685 0;687 0;630 0;687 0;685 0;629 2;1078 2;1079 0;686 0;685 -1
 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 /map
-entity soldat_squelette
+entity skeletal_soldier
 position tiles 11;13
-combat soldat_squelette;1 soldat_squelette;1
+combat skeletal_soldier;1 skeletal_soldier;1
 ephemeral 1
 /entity
-entity orbe_bleue
+entity blue_orb
 position tiles 2;8
-combat orbe_bleue;2 orbe_bleue;2 orbe_bleue;2 orbe_bleue;2
+combat blue_orb;2 blue_orb;2 blue_orb;2 blue_orb;2
 /entity
 /level
 level 3 3
@@ -718,15 +718,15 @@ map2
 -1 0;685 0;686 0;685 0;687 0;685 0;687 0;685 2;1079 0;686 0;685 0;685 0;685 0;685 0;686 0;630 2;1079 0;685 0;686 0;685 2;1078 -1
 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 /map
-joueur tiles 20;12
-entity fantome_noir
+player tiles 20;12
+entity black_ghost
 position tiles 9;11
 looped_ai 9;11 13;11
-combat fantome_noir;1 chauve_souris;1 fantome_noir;1 chauve_souris;1
+combat black_ghost;1 bat;1 black_ghost;1 bat;1
 /entity
 entity npc_dialogue
 position tiles 20;10
 dialogue ;Bonjour jeune voyageur!;Bienvenue à GRMG!;J'ai besoin de tes services.;Apporte moi un diamant et une côte de mailles;Pour une superbe récompense;
-marchand 42;126 131
+merchant 42;126 131
 /entity
 /level

@@ -12,6 +12,8 @@ from components.merchant import Merchant
 from components.initiatecombat import InitiateCombat
 from components.stats import Stats
 from components.inventory import Inventory
+from components.collider import Collider
+from components.alignedbox import AlignedBox
 from time import time
 import random
 import pickle
@@ -27,7 +29,7 @@ class GState:
         except FileNotFoundError:
             save_data = None
         self.state = state
-        self.state.player = self.state.usine_entity.crée('player')
+        self.state.player = self.state.entity_factory.create('player')
         if save_data:
             inventory = self.state.player.get_component(Inventory)
             inventory.inventory = save_data[0]
@@ -36,7 +38,7 @@ class GState:
             level_init = state.levels[save_data[2]]
         else:
             cx, cy = None, None
-            level_init = None
+            level_init = state.levels[(3, 3)]
             self.state.player.get_component(Position).levels = state.levels[(3, 3)]
         self.state.entities.append(self.state.player)
         self.state.player.get_component(Inventory).stats = self.state.player.get_component(Stats)
@@ -55,7 +57,7 @@ class GState:
             stats.HP = saved_states.HP
 
         self.state.move_entity(self.state.player, level_init, cx, cy)
-        self.temps = time()
+        self.time = time()
 
     def __clean_up(self):
         while self.state.entities_to_destroy:
@@ -71,7 +73,7 @@ class GState:
     def __update_grid_movement(self, entity):
         level = self.state.player.get_component(Position).level
         position = entity.get_component(Position)
-        movement = entity.get_component(GridMouvement)
+        movement = entity.get_component(GridMovement)
 
         if not position or not movement or position.level != level:
             return
@@ -139,7 +141,7 @@ class GState:
         return None
 
     def __update_looped_auto_movement(self, entity):
-        ab = entity.get_component(LoopedAI)
+        ab = entity.get_component(LoopedAi)
         ctrl = entity.get_component(Controllable)
         pos = entity.get_component(Position)
 
@@ -165,7 +167,7 @@ class GState:
             ctrl.force = None
 
     def __update_targeted_ai_movement(self, entity):
-        ac = entity.get_component(RandomAI)
+        ac = entity.get_component(RandomAi)
         ctrl = entity.get_component(Controllable)
         pos = entity.get_component(Position)
         ori = entity.get_component(Orientable)
@@ -223,7 +225,7 @@ class GState:
             position = entity.get_component(Position)
             if position:
                 x, y = self.state.calculate_position(entity)
-                tile = position.niveau.carte[int(x)][int(y)]
+                tile = position.level.map[int(x)][int(y)]
                 tile.on_walk(self.state, entity)
 
     def __can_enter(self, level, tile, entity):

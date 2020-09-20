@@ -13,4 +13,4 @@ class Level:
 
         self.player_init = None
         self.player_init_coords = None
-        self.entités_init = None
+        self.entities_init = []
