@@ -1,16 +1,16 @@
-import constantes as C
-from composants.controlable import Controllable
-from composants.mouvementgrille import GridMovement
-from composants.orientable import Orientable
-from composants.position import Position
-from composants.collisionneur import Collider
-from composants.joueur import Player
-from composants.zombie import Zombie
-from composants.boitealignee import AlignedBox
-from composants.autonomiebouclee import LoopedAI
-from composants.autonomieciblee import RandomAI
-from composants.inventaire import Inventory
-from composants.stats import Stats
+import constants as C
+from components.controllable import Controllable
+from components.gridmouvement import GridMouvement
+from components.orientable import Orientable
+from components.position import Position
+from components.player import Player
+from components.loopedai import LoopedAi
+from components.randomai import RandomAi
+from components.ephemeral import Ephemeral
+from components.dialogue import Dialogue
+from components.merchant import Merchant
+from components.initiatecombat import InitiateCombat
+from components.stats import Stats
 from time import time
 import random
 import pickle
@@ -70,7 +70,7 @@ class GState:
     def __update_grid_movement(self, entity):
         level = self.state.player.get_component(Position).level
         position = entity.get_component(Position)
-        movement = entity.get_component(GridMovement)
+        movement = entity.get_component(GridMouvement)
 
         if not position or not movement or position.level != level:
             return

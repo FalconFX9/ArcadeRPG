@@ -1,4 +1,6 @@
-import constants as C
+
+import constantes as C
+from boutton import Boutton
 from components.controllable import Controllable
 from components.gridmouvement import GridMouvement
 from components.orientable import Orientable
@@ -19,8 +21,11 @@ class GameState:
 
     def __init__(self):
         self.dt = C.DT
-        self.state = C.LEVEL_STATE
+        self.state = C.ÉTAT_NIVEAU
         self.entity_factory = None
+
+        self.carré_débogage_pos = 0
+        self.mode_débogage = False
 
         self.levels = None
         self.player = None
