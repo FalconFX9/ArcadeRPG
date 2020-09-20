@@ -1,7 +1,7 @@
 from components.inventory import Inventory
 
 
-class Marchand:
+class Merchant:
     def __init__(self):
         self.required_item = {}
         self.given_item = {}

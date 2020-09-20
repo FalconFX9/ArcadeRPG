@@ -12,4 +12,4 @@ class TeleporterTile(Tile):
         return True
 
     def on_enter(self, state, entity):
-        state.déplace_entité(entity, state.niveaux[self.clevel], self.cx, self.cy)
+        state.déplace_entité(entity, state.levels[self.clevel], self.cx, self.cy)

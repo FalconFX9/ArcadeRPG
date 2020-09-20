@@ -82,7 +82,7 @@ class Map(arcade.View):
         interpolation = delta_time / C.DT
         level = self.state.player.obtient_composant(Position).level
 
-        for entity in self.state.entités:
+        for entity in self.state.entities:
             position = entity.obtient_composant(Position)
             sprite = entity.obtient_composant(Sprite)
             mouvement = entity.obtient_composant(GridMovement)
