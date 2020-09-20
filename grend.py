@@ -61,7 +61,7 @@ class Map(arcade.View):
         self.entities = arcade.SpriteList()
 
     def on_level_change(self):
-        position = self.state.joueur.get_component(Position)
+        position = self.state.player.get_component(Position)
         if not position:
             return
         for y in range(position.level.h - 1):
@@ -80,7 +80,7 @@ class Map(arcade.View):
 
     def on_update(self, delta_time: float):
         interpolation = delta_time / C.DT
-        level = self.state.joueur.obtient_composant(Position).level
+        level = self.state.player.obtient_composant(Position).level
 
         for entity in self.state.entités:
             position = entity.obtient_composant(Position)
