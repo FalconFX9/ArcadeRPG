@@ -64,6 +64,7 @@ ITEM_END_TAG = '/item'
 EPHEMERAL_TAG = 'ephemeral'
 MERCHANT_TAG = 'merchant'
 COMBAT_TAG = 'combat'
+RELOAD_ANIM = 150
 
 STATS_PER_LEVEL = {
     1: (500, 0, 20, 200),
