@@ -27,8 +27,8 @@ class CombatMechanic:
         self.tour = not self.tour
 
     def attack(self, attacking_entity, selected_entity):
-        attack_stat = attacking_entity.obtient_composant(Stats)
-        selected_stats = selected_entity.obtient_composant(Stats)
+        attack_stat = attacking_entity.get_component(Stats)
+        selected_stats = selected_entity.get_component(Stats)
 
         if randint(0, 100) >= selected_stats.agility:
             multiplier = randint(-30, 30) / 100
@@ -46,12 +46,12 @@ class CombatMechanic:
                 for id, entity in self.enemies.items():
                     if entity == selected_entity:
                         death_id = id
-                self.enemies.pop(death_id)
+                        self.enemies.pop(death_id)
 
     def calculate_XP(self):
         XP_gain = 0
-        for entity in self.state.combat_launch_entity.obtain_component(InitiateCombat).combat_entities.values():
-            level = entity.obtient_composant(Stats).level
+        for entity in self.state.combat_launch_entity.get_component(InitiateCombat).combat_entities.values():
+            level = entity.get_component(Stats).level
             XP_gain += C.XP_GAIN[entity.id] * (1 + (level / 5))
         return XP_gain
 
@@ -65,16 +65,16 @@ class CombatMechanic:
             self.tour = True
             self.state.state = C.VICTORY_STATE
             if self.flee:
-                stats_joueur = self.state.player.obtain_component(Stats)
+                stats_joueur = self.state.player.get_component(Stats)
                 self.state.state = C.LEVEL_STATE
                 stats_joueur.XP += self.calculate_XP()
                 if stats_joueur.vérifie_niveau():
-                    self.state.joueur.obtient_composant(Inventory).vérifie_stats()
+                    self.state.player.get_component(Inventory).vérifie_stats()
                 self.state.entités_détruites.append(self.state.combat_launch_entity.id)
                 if 'Boss' in self.state.combat_launch_entity.id:
                     self.state.state = C.GAME_END
-                self.state.entités.remove(self.state.combat_launch_entity)
-                self.state.joueur.obtient_composant(Controllable).force = None
+                self.state.entities.remove(self.state.combat_launch_entity)
+                self.state.player.get_component(Controllable).force = None
                 self.flee = False
         elif self.state.bouttons['Flee'].cliqué:
             pygame.mixer.music.stop()
@@ -87,7 +87,7 @@ class CombatMechanic:
             self.tour = True
             self.selected_entity = None
             self.enemies.clear()
-        elif self.state.joueur.obtient_composant(Stats).HP <= 0:
+        elif self.state.joueur.get_component(Stats).HP <= 0:
             self.state.state = C.FAILURE_STATE
             pygame.mixer.music.stop()
             pygame.mixer.music.reload('ressources\\Musique\\Game Over.mp3')
@@ -129,17 +129,17 @@ class CombatMechanic:
                 self.reload -= 1
 
     def healing(self):
-        stats = self.state.joueur.obtient_composant(Stats)
+        stats = self.state.joueur.get_component(Stats)
         stats.HP += (stats.HP_MAX * 0.33) * (random() / 2 + 1)
         if stats.HP > stats.HP_MAX:
             stats.HP = stats.HP_MAX
 
-    def gestionnaire_tours(self):
+    def turn_manager(self):
         if self.tour:
             self.check_selected_enemy()
             self.player_turn()
         else:
-            enemies_num = len(self.state.combat_launch_entity.obtain_component(InitiateCombat).combat_entities.values())
+            enemies_num = len(self.state.combat_launch_entity.get_component(InitiateCombat).combat_entities.values())
             if 'Boss' not in self.state.combat_launch_entity.id:
                 if self.counter in self.enemies.keys():
                     self.enemy_turn(self.counter)

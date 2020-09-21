@@ -5,6 +5,7 @@ from gamestate import GameState
 from gstate import GState
 from gworldfile import Gworldfile
 from gitemfiles import Gitemfiles
+from combatmechanic import CombatMechanic
 import copy
 
 
@@ -19,6 +20,8 @@ class Game(arcade.Window):
         self.gstate = GState(self.state)
         self.state.state = C.LEVEL_STATE
         self.map.gstate = self.gstate
+        self.gstate.combat_mechanic = CombatMechanic(self.state)
+        self.state.entity_factory.combat_mechanic = self.gstate.combat_mechanic
 
 
 if __name__ == '__main__':
