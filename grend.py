@@ -143,7 +143,7 @@ class Map(arcade.View):
                 tile = position.level.map1[x][y]
                 tile.texture = self.image_loader.obtain_tile(int(tile.variant))
                 tile.center_x = (tile.mapx * C.TILE_SIZE - (C.TILE_SIZE // 2))
-                tile.center_y = (C.HEIGHT + C.TILE_SIZE//2) - tile.mapy * C.TILE_SIZE
+                tile.center_y = (C.HEIGHT + C.TILE_SIZE // 2) - tile.mapy * C.TILE_SIZE
                 self.tiles.append(tile)
                 tile = position.level.map2[x][y]
                 if tile:
@@ -151,6 +151,27 @@ class Map(arcade.View):
                     tile.center_x = tile.mapx * C.TILE_SIZE - C.TILE_SIZE + 16
                     tile.center_y = C.HEIGHT - (tile.mapy * C.TILE_SIZE) + 16
                     self.tiles2.append(tile)
+
+    def on_key_press(self, symbol: int, modifiers: int):
+        controllable = self.state.player.get_component(Controllable)
+        if symbol == arcade.key.W or symbol == arcade.key.UP:
+            controllable.force = C.DIRECTION_N
+        elif symbol == arcade.key.D or symbol == arcade.key.RIGHT:
+            controllable.force = C.DIRECTION_E
+        elif symbol == arcade.key.S or symbol == arcade.key.DOWN:
+            controllable.force = C.DIRECTION_S
+        elif symbol == arcade.key.A or symbol == arcade.key.LEFT:
+            controllable.force = C.DIRECTION_O
+
+    def on_key_release(self, symbol: int, modifiers: int):
+        controllable = self.state.player.get_component(Controllable)
+        if controllable:
+            force = controllable.force
+            if ((symbol == arcade.key.W or symbol == arcade.key.UP) and force == C.DIRECTION_N) or \
+                    ((symbol == arcade.key.S or symbol == arcade.key.DOWN) and force == C.DIRECTION_S) or \
+                    ((symbol == arcade.key.A or symbol == arcade.key.LEFT) and force == C.DIRECTION_O) or \
+                    ((symbol == arcade.key.D or symbol == arcade.key.RIGHT) and force == C.DIRECTION_E):
+                controllable.force = 0
 
     def on_update(self, delta_time: float):
         interpolation = delta_time / C.DT
@@ -164,7 +185,6 @@ class Map(arcade.View):
             if not position or not sprite or position.level != level:
                 continue
 
-            # Obtiens l'image appropriée.
             for image, condition in sprite.images.items():
                 if condition(entity):
                     if mouvement.reload:
@@ -187,7 +207,6 @@ class Map(arcade.View):
             else:
                 continue
 
-            # Détermine la position en pixels.
             if self.state.state != C.PAUSE_STATE:
                 x, y = self.state.calculate_position(entity, interpolation)
             else:
@@ -224,4 +243,3 @@ class Map(arcade.View):
         self.tiles.draw()
         self.tiles2.draw()
         self.entities.draw()
-

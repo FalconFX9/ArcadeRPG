@@ -52,6 +52,7 @@ class GameState:
 
     def calculate_start_position(self, mode, coords):
         # Définir la position.
+        print(mode, coords)
         if mode == C.INITIAL_PLAYER_RECTANGLE:
             x1, y1 = coords[0]
             x2, y2 = coords[1]
@@ -60,7 +61,7 @@ class GameState:
         elif mode == C.INITIAL_PLAYER_TILE:
             x, y = random.choice(coords)
         else:
-            x, y = 10, 8
+            x, y = 10, 13
 
         return x, y
 

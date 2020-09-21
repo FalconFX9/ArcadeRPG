@@ -721,7 +721,7 @@ map2
 player tiles 20;12
 entity black_ghost
 position tiles 9;11
-looped_ai 3;11 13;11
+looped_ai 9;11 13;11
 combat black_ghost;1 bat;1 black_ghost;1 bat;1
 /entity
 entity npc_dialogue
