@@ -64,7 +64,7 @@ class GState:
             entity = self.state.entities_to_destroy.pop()
 
             if entity.contient_composant(Player):
-                self.state.state = C.ÉTAT_ÉCHEC
+                self.state.state = C.FAILURE_STATE
 
             else:
                 if entity in self.state.entities:
@@ -107,12 +107,12 @@ class GState:
                 orientable.reload = orientable.cost
 
             else:
-                tuile = self.calculate_target_tile(entity, controllable.force)
-                if tuile and self.__can_enter(position.level, tuile, entity):
+                tile = self.calculate_target_tile(entity, controllable.force)
+                if tile and self.__can_enter(position.level, tile, entity):
                     movement.sx = position.x
                     movement.sy = position.y
-                    movement.cx = tuile.mapx
-                    movement.cy = tuile.mapy
+                    movement.cx = tile.mapx
+                    movement.cy = tile.mapy
 
                     movement.reload = movement.cost
 
