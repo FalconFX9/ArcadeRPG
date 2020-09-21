@@ -13,14 +13,15 @@ class ChestTile(Tile):
         return False
 
     def on_interact(self, state, entity):
-        inventory = entity.obtain_component(Inventory)
+        inventory = entity.get_component(Inventory)
         if not self.open:
             if self.money:
-                inventory.ajoute_argent(self.money)
+                inventory.add_money(self.money)
             for id in self.items:
-                inventory.add_item(entity.ensemble_items[int(id)])
-            if state.levels[entity.obtain_component(Position).level.id].map1[self.x][self.y].variant == '1060':
-                state.levels[entity.obtain_component(Position).level.id].map1[self.x][self.y].variant = '1062'
+                inventory.add_item(state.item_set[int(id)])
+            if state.levels[entity.get_component(Position).level.id].map1[self.mapx][self.mapy].variant == '1060':
+                state.levels[entity.get_component(Position).level.id].map1[self.mapx][self.mapy].variant = '1062'
             else:
-                state.levels[entity.obtain_component(Position).level.id].map2[self.x][self.y].variant = '1062'
+                state.levels[entity.get_component(Position).level.id].map2[self.mapx][self.mapy].variant = '1062'
             self.open = True
+            state.force_update = True

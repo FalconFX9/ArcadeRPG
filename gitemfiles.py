@@ -4,6 +4,7 @@ from components.item import Item
 
 class Gitemfiles:
 
+    @staticmethod
     def __charge_fichier(file):
         with open(file, 'r', encoding='utf-8') as f:
             return f.read()
@@ -57,7 +58,7 @@ class Gitemfiles:
         return items
 
     @staticmethod
-    def charge(file):
+    def load(file):
         data = Gitemfiles.__charge_fichier(file)
         lines = data.splitlines()
         lines = list(filter(len, lines))

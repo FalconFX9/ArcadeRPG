@@ -234,8 +234,8 @@ class EntityFactory:
 
     def create_devil(self):
         sprite_img = self.load_combat_images.obtain('Devil')
-        sprite_img.width = 32
-        sprite_img.height = 32
+        sprite_img.width = 48
+        sprite_img.height = 48
         return Entity('Devil').add_component(
             Combat(self.load_combat_images.obtain('Devil')),
             Stats(20, (0.2, 0, 2, 1)),
@@ -245,26 +245,17 @@ class EntityFactory:
             Orientable(C.DIRECTION_E, C.PLAYER_WALK_RELOAD),
             Sprite({
                 sprite_img:
-                lambda e: e.get_component(
-                    Orientable).orientation == C.DIRECTION_N,
-                sprite_img:
-                lambda e: e.get_component(
-                    Orientable).orientation == C.DIRECTION_O,
-                sprite_img:
-                lambda e: e.get_component(
-                    Orientable).orientation == C.DIRECTION_S,
-                sprite_img:
                 lambda e: True})
         )
 
     def create_boss(self):
         def en_collision(state, e1, e2):
-            if e2.contient_composant(Player):
+            if e2.contains_component(Player):
                 combat = e1.get_component(InitiateCombat)
-                state.Entity_lance_combat = e1
-                combat.sur_interaction(state)
-                self.combat_mechanic.ennemis[1] = copy.copy(e1.get_component(InitiateCombat).entities_combat[0])
-                self.combat_mechanic.ennemis[1].get_component(Stats).réinit_HP()
+                state.combat_launch_entity = e1
+                combat.on_interact(state)
+                self.combat_mechanic.enemies[1] = copy.copy(e1.get_component(InitiateCombat).combat_entities[0])
+                self.combat_mechanic.enemies[1].get_component(Stats).reinit_HP()
 
         return Entity('Boss').add_component(
             Combat(self.load_combat_images.obtain('Boss')),

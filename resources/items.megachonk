@@ -1,0 +1,51 @@
+item Small_Sword
+id 91
+attack 5
+armor 0
+price 500
+type 0
+/item
+item Big_Sword
+id 92
+attack 30
+armor 0
+price 1500
+type 0
+/item
+item Fire_Sword
+id 103
+attack 100
+armor 0
+price 5000
+/item
+item Chainmail
+id 126
+attack 0
+armor 20
+price 1000
+type 1
+/item
+item Gold_Armor
+id 131
+attack 0
+armor 40
+price 10000
+/item
+item Viking_Helmet
+id 123
+attack 15
+armor 5
+price 1000
+/item
+item Golden_Boots
+id 132
+attack 0
+armor 15
+price 3000
+/item
+item Diamond
+id 42
+attack 0
+armor 0
+price 10000
+/item

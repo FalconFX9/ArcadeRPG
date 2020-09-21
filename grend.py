@@ -20,6 +20,7 @@ from components.inventory import Inventory
 from components.sprite import Sprite
 from components.alignedbox import AlignedBox
 from entityfactory import EntityFactory
+import time
 
 
 class Menu(arcade.View):
@@ -216,9 +217,11 @@ class Map(arcade.View):
                 controllable.force = 0
 
     def on_update(self, delta_time: float):
+        print(delta_time)
         interpolation = delta_time / C.DT
         level = self.state.player.get_component(Position).level
-        if self.current_level != level:
+        if self.current_level != level or self.state.force_update:
+            self.state.force_update = False
             self.setup()
         counter = 0
         for num, entity in enumerate(self.state.entities):
@@ -273,9 +276,12 @@ class Map(arcade.View):
                 for entity_2 in self.state.entities:
                     if level == entity_2.get_component(Position).level:
                         self.entities.append(arcade.Sprite())
-            self.entities[counter].center_x = pos[0] - 16
-            self.entities[counter].center_y = C.HEIGHT - pos[1] + 16
-            self.entities[counter].texture = img
+            if type(img) is not arcade.Texture:
+                self.entities[counter] = img
+            else:
+                self.entities[counter].texture = img
+            self.entities[counter].center_x = pos[0] - 16 + (self.entities[counter].width - 32) // 2
+            self.entities[counter].center_y = C.HEIGHT - pos[1] + 16 - (self.entities[counter].height - 32) // 2
 
             self.prev_coords[entity] = x, y
 

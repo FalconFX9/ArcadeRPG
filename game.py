@@ -14,6 +14,7 @@ class Game(arcade.Window):
         super().__init__(*args, **kwargs)
         self.state = GameState()
         self.state.init_levels = Gworldfile.load(C.WOLRD_SOURCE)
+        self.state.item_set = Gitemfiles.load(C.ITEM_SOURCE)
         self.state.levels = copy.deepcopy(self.state.init_levels)
         self.menu = Menu(self.state, self)
         self.map = Map(self.state, self)

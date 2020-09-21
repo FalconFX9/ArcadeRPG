@@ -22,6 +22,7 @@ class GameState:
         self.dt = C.DT
         self.state = C.LEVEL_STATE
         self.entity_factory = None
+        self.force_update = False
 
         self.levels = None
         self.player = None

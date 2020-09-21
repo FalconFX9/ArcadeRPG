@@ -13,7 +13,7 @@ class WaterTile(Tile):
         if 132 in inventory.inventory.keys():
             return True
         else:
-            return False
+            return True
 
     def on_entrance(self, state, entity):
         movement = entity.get_component(GridMovement)
