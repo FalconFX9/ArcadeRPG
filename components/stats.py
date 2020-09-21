@@ -32,5 +32,5 @@ class Stats:
         self.HP_MAX, self.defence, self.attack, self.XP_MAX = self.stats_per_level[level]
         self.level = level
 
-    def reinit_hp(self):
+    def reinit_HP(self):
         self.HP = self.HP_MAX

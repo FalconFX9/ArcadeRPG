@@ -142,14 +142,14 @@ class Map(arcade.View):
             if position.x == tuile.mapx and position.y == tuile.mapy and position.level == self.state.player.get_component(
                     Position).level:
                 if dialogue:
-                    dialogue.sur_interaction(entity, self.state.player)
+                    dialogue.on_interaction(entity, self.state.player)
                     merchant = entity.get_component(Merchant)
-                    if dialogue.conteur >= len(dialogue.dialogue) + 1:
+                    if dialogue.counter >= len(dialogue.dialogue) + 1:
                         if merchant:
                             merchant.on_exchange(self.state.player)
-                            if dialogue.conteur >= len(dialogue.dialogue) + len(merchant.missing_item) + 1:
+                            if dialogue.counter >= len(dialogue.dialogue) + len(merchant.missing_item) + 1:
                                 if None in merchant.missing_item:
-                                    merchant.items_manquants.remove(None)
+                                    merchant.missing_item.remove(None)
                                 dialogue.active = False
                                 dialogue.counter = 0
                                 merchant.dialogue = None
@@ -167,7 +167,7 @@ class Map(arcade.View):
                     if self.gstate.combat_mechanic.enemies[0].id == 'Boss':
                         self.gstate.combat_mechanic.enemies[1] = self.gstate.mécanique_combat.ennemis.pop(0)
 
-        tuile.sur_interaction(self.state, self.state.player)
+        tuile.on_interact(self.state, self.state.player)
 
     def on_level_change(self):
         level = self.state.player.get_component(Position).level

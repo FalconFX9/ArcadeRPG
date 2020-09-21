@@ -12,7 +12,7 @@ class Merchant:
 
     def on_exchange(self, player):
         if not self.exchange:
-            inventory = player.obtient_composant(Inventory)
+            inventory = player.get_component(Inventory)
             for item in self.required_item.values():
                 if item.id in inventory.inventory:
                     if item in self.missing_item:
