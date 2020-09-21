@@ -29,7 +29,7 @@ class GameState:
         self.entities = []
         self.entities_to_destroy = set()
         self.destroyed_entities = []
-        self.combat_launch_entities = None
+        self.combat_launch_entity = None
         self.buttons = {}
         self.target_buttons = []
         self.inventory_buttons = []

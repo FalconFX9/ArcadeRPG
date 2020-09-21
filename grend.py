@@ -1,4 +1,5 @@
 import arcade
+import copy
 import constants as C
 from arcade.gui import UIManager, UIFlatButton
 from loadimageset import LoadImageSet
@@ -131,6 +132,43 @@ class Map(arcade.View):
         self.entities = arcade.SpriteList()
         self.on_level_change()
 
+    def __interaction(self):
+        orientable = self.state.player.get_component(Orientable)
+        tuile = self.gstate.calculate_target_tile(self.state.player, orientable.orientation)
+        for entity in self.state.entities:
+            position = entity.get_component(Position)
+            dialogue = entity.get_component(Dialogue)
+            combat = entity.get_component(InitiateCombat)
+            if position.x == tuile.mapx and position.y == tuile.mapy and position.level == self.state.player.get_component(
+                    Position).level:
+                if dialogue:
+                    dialogue.sur_interaction(entity, self.state.player)
+                    merchant = entity.get_component(Merchant)
+                    if dialogue.conteur >= len(dialogue.dialogue) + 1:
+                        if merchant:
+                            merchant.on_exchange(self.state.player)
+                            if dialogue.conteur >= len(dialogue.dialogue) + len(merchant.missing_item) + 1:
+                                if None in merchant.missing_item:
+                                    merchant.items_manquants.remove(None)
+                                dialogue.active = False
+                                dialogue.counter = 0
+                                merchant.dialogue = None
+                            else:
+                                dialogue.counter += 1
+                        else:
+                            dialogue.counter = 0
+                            dialogue.active = False
+                elif combat:
+                    self.state.combat_launch_entity = entity
+                    combat.on_interact(self.state)
+                    for entity in combat.combat_entities.values():
+                        entity.get_component(Stats).reinit_HP()
+                    self.gstate.combat_mechanic.enemies = copy.copy(combat.combat_entities)
+                    if self.gstate.combat_mechanic.enemies[0].id == 'Boss':
+                        self.gstate.combat_mechanic.enemies[1] = self.gstate.mécanique_combat.ennemis.pop(0)
+
+        tuile.sur_interaction(self.state, self.state.player)
+
     def on_level_change(self):
         level = self.state.player.get_component(Position).level
         self.current_level = level
@@ -164,6 +202,8 @@ class Map(arcade.View):
             controllable.force = C.DIRECTION_S
         elif symbol == arcade.key.A or symbol == arcade.key.LEFT:
             controllable.force = C.DIRECTION_O
+        elif symbol == arcade.key.SPACE:
+            self.__interaction()
 
     def on_key_release(self, symbol: int, modifiers: int):
         controllable = self.state.player.get_component(Controllable)
