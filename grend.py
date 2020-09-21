@@ -229,21 +229,21 @@ class Map(arcade.View):
         for num, entity in enumerate(self.state.entities):
             position = entity.get_component(Position)
             sprite = entity.get_component(Sprite)
-            mouvement = entity.get_component(GridMovement)
+            movement = entity.get_component(GridMovement)
 
             if not position or not sprite or position.level != level:
                 continue
 
             for image, condition in sprite.images.items():
                 if condition(entity):
-                    if mouvement.reload:
-                        if 36 >= mouvement.reload >= 24:
+                    if movement.reload:
+                        if 36 >= movement.reload >= 24:
                             id = 2
-                        elif 24 > mouvement.reload >= 16:
+                        elif 24 > movement.reload >= 16:
                             id = 1
-                        elif 16 > mouvement.reload >= 8:
+                        elif 16 > movement.reload >= 8:
                             id = 0
-                        elif 8 > mouvement.reload >= 0:
+                        elif 8 > movement.reload >= 0:
                             id = 1
                     else:
                         id = 1
