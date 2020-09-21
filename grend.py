@@ -71,6 +71,7 @@ class Map(arcade.View):
         self.tiles2 = None
         self.entities = None
         self.gstate = None
+        self.current_level = None
 
         self.state.image_loader = LoadImages()
         self.state.image_loader.load('Target', 'GraphicalInterface/Crosshair.png')
@@ -132,6 +133,7 @@ class Map(arcade.View):
 
     def on_level_change(self):
         level = self.state.player.get_component(Position).level
+        self.current_level = level
         for entity_2 in self.state.entities:
             if level == entity_2.get_component(Position).level:
                 self.entities.append(arcade.Sprite())
@@ -176,6 +178,8 @@ class Map(arcade.View):
     def on_update(self, delta_time: float):
         interpolation = delta_time / C.DT
         level = self.state.player.get_component(Position).level
+        if self.current_level != level:
+            self.setup()
         counter = 0
         for num, entity in enumerate(self.state.entities):
             position = entity.get_component(Position)

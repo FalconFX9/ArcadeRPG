@@ -56,7 +56,6 @@ class GState:
             stats.XP = saved_states.XP
             stats.HP = saved_states.HP
 
-        print(level_init.entities_init)
         self.state.move_entity(self.state.player, level_init, cx, cy)
         self.time = time()
 
