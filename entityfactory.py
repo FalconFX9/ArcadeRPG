@@ -30,7 +30,7 @@ class EntityFactory:
 
     def create_player(self):
         return Entity().add_component(
-            Stats(5),
+            Stats(5, (1, 1, 15, 1)),
             Inventory(),
             Controllable(),
             GridMovement(
@@ -96,13 +96,13 @@ class EntityFactory:
 
     def create_bat(self):
         return Entity('Bat').add_component(
-            Combat(self.load_combat_images.obtain('Bat')),
+            Combat(copy.deepcopy(self.load_combat_images.obtain('Bat'))),
             Stats(15, (0.1, 0, 1, 1)),
         )
 
     def create_black_ghost(self):
         return Entity('BlackGhost').add_component(
-            Combat(self.load_combat_images.obtain('BlackGhost')),
+            Combat(copy.deepcopy(self.load_combat_images.obtain('BlackGhost'))),
             Stats(20, (0.05, 7, 3, 1)),
             Position(None, None, None),
             AlignedBox(-0.5, -0.5, 0.5, 0.5),
@@ -124,7 +124,7 @@ class EntityFactory:
 
     def create_skeletal_soldier(self):
         return Entity('SkelSoldier').add_component(
-            Combat(self.load_combat_images.obtain('SkelSoldier')),
+            Combat(copy.deepcopy(self.load_combat_images.obtain('SkelSoldier'))),
             Stats(5, (0.8, 4, 0.2, 1)),
             Position(None, None, None),
             AlignedBox(-0.5, -0.5, 0.5, 0.5),
@@ -146,7 +146,7 @@ class EntityFactory:
 
     def create_dark_soldier(self):
         return Entity('DarkSoldier').add_component(
-            Combat(self.load_combat_images.obtain('DarkSoldier')),
+            Combat(copy.deepcopy(self.load_combat_images.obtain('DarkSoldier'))),
             Stats(0, (0.4, 8, 5, 1)),
             Position(None, None, None),
             AlignedBox(-0.5, -0.5, 0.5, 0.5),
@@ -168,7 +168,7 @@ class EntityFactory:
 
     def create_blue_orb(self):
         return Entity('BlueOrb').add_component(
-            Combat(self.load_combat_images.obtain('BlueOrb')),
+            Combat(copy.deepcopy(self.load_combat_images.obtain('BlueOrb'))),
             Stats(50, (0.2, 0, 0.5, 1)),
             Position(None, None, None),
             AlignedBox(-0.5, -0.5, 0.5, 0.5),
@@ -190,7 +190,7 @@ class EntityFactory:
 
     def create_skeleton(self):
         return Entity('Skeleton').add_component(
-            Combat(self.load_combat_images.obtain('Skeleton')),
+            Combat(copy.deepcopy(self.load_combat_images.obtain('Skeleton'))),
             Stats(8, (0.5, 5, 0.8, 1)),
             Position(None, None, None),
             AlignedBox(-0.5, -0.5, 0.5, 0.5),
@@ -212,7 +212,7 @@ class EntityFactory:
 
     def create_wolf(self):
         return Entity('Wolf').add_component(
-            Combat(self.load_combat_images.obtain('Wolf')),
+            Combat(copy.deepcopy(self.load_combat_images.obtain('Wolf'))),
             Stats(30, (0.2, 0, 3, 1)),
             Position(None, None, None),
             AlignedBox(-0.5, -0.5, 0.5, 0.5),
@@ -237,7 +237,7 @@ class EntityFactory:
         sprite_img.width = 48
         sprite_img.height = 48
         return Entity('Devil').add_component(
-            Combat(self.load_combat_images.obtain('Devil')),
+            Combat(copy.deepcopy(self.load_combat_images.obtain('Devil'))),
             Stats(20, (0.2, 0, 2, 1)),
             Position(None, None, None),
             AlignedBox(-0.5, -0.5, 0.5, 0.5),
@@ -258,7 +258,7 @@ class EntityFactory:
                 self.combat_mechanic.enemies[1].get_component(Stats).reinit_HP()
 
         return Entity('Boss').add_component(
-            Combat(self.load_combat_images.obtain('Boss')),
+            Combat(copy.deepcopy(self.load_combat_images.obtain('Boss'))),
             Stats(10, (4, 8, 3, 1)),
             Position(None, None, None),
             AlignedBox(-4.5, -4.5, 4.5, 4.5),

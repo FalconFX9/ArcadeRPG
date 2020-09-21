@@ -1,7 +1,7 @@
 import arcade
 import copy
 import constants as C
-from arcade.gui import UIManager, UIFlatButton
+from arcade.gui import UIManager, UIFlatButton, UIImageButton
 from loadimageset import LoadImageSet
 from loadimages import LoadImages
 from components.controllable import Controllable
@@ -20,7 +20,9 @@ from components.inventory import Inventory
 from components.sprite import Sprite
 from components.alignedbox import AlignedBox
 from entityfactory import EntityFactory
-import time
+from combatmechanic import CombatMechanic
+from components.combat import Combat
+from math import sin
 
 
 class Menu(arcade.View):
@@ -52,8 +54,7 @@ class Menu(arcade.View):
 
         @start.event('on_click')
         def play():
-            self.state = 1
-            print('GO!')
+            self.state.update_state()
 
     def on_show_view(self):
         self.setup()
@@ -123,6 +124,7 @@ class Map(arcade.View):
         self.image_loader.load_tiles('tileset.png', 32, 32)
         self.image_loader.load_items('roguelikeitems.png', 16, 16)
         self.image_loader.load_animations('Guérir', 'heal_003.png', 192, 192)
+        self.file = open('data.txt', 'w')
 
     def on_show_view(self):
         self.setup()
@@ -132,6 +134,7 @@ class Map(arcade.View):
         self.tiles2 = arcade.SpriteList()
         self.entities = arcade.SpriteList()
         self.on_level_change()
+        self.on_update(C.DT)
 
     def __interaction(self):
         orientable = self.state.player.get_component(Orientable)
@@ -217,7 +220,6 @@ class Map(arcade.View):
                 controllable.force = 0
 
     def on_update(self, delta_time: float):
-        print(delta_time)
         interpolation = delta_time / C.DT
         level = self.state.player.get_component(Position).level
         if self.current_level != level or self.state.force_update:
@@ -288,8 +290,148 @@ class Map(arcade.View):
             self.gstate.update()
             counter += 1
 
+            if self.state.state == C.COMBAT_STATE:
+                self.window.show_view(CombatView(self.state, self.gstate.combat_mechanic, self.window))
+
     def on_draw(self):
         arcade.start_render()
         self.tiles.draw()
         self.tiles2.draw()
         self.entities.draw()
+
+
+class TargetButton(UIImageButton):
+
+    def __init__(self, gid, combat_mechanic, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.gid = gid
+        self.combat_mechanic = combat_mechanic
+
+    def on_click(self):
+        self.combat_mechanic.selected_entity = self.combat_mechanic.enemies[self.gid]
+
+
+class CombatView(arcade.View):
+
+    def __init__(self, state, combat_mechanic: CombatMechanic, window):
+        super().__init__(window)
+        self.state = state
+        self.combat_mechanic = combat_mechanic
+        self.background_img = None
+        self.player = None
+        self.ui_manager = UIManager(window)
+
+    def setup(self):
+        self.ui_manager.purge_ui_elements()
+        self.background_img = arcade.load_texture(C.RESOURCES + 'Backgrounds/fond_plage.jpg')
+        self.player = self.state.image_loader.obtain('Combat_player')
+        for id, entity in self.combat_mechanic.enemies.items():
+            img = arcade.load_texture(C.RESOURCES + "GraphicalInterface/Crosshair.png")
+            img2 = arcade.load_texture(C.RESOURCES + "GraphicalInterface/CrosshaiorTr.png")
+            button = TargetButton(id, self.combat_mechanic, 500 + 10 * id, C.HEIGHT - (80 + 120 * id), img2, img, img, "", id)
+            self.ui_manager.add_ui_element(button)
+
+    def on_show_view(self):
+        self.setup()
+
+    def on_update(self, delta_time: float):
+        if self.combat_mechanic.killed:
+            self.setup()
+        if self.combat_mechanic.missed_attack or self.combat_mechanic.turn:
+            self.player = self.state.image_loader.obtain('Combat_player')
+        else:
+            self.player = self.state.image_loader.obtain('Combat_player')
+            if self.combat_mechanic.reload > 50:
+                if sin(self.combat_mechanic.reload / 4) > 0:
+                    self.combat_mechanic.reload -= 8
+                    self.player = self.state.image_loader.obtain('Attacked_player')
+
+        self.player.center_x = 52
+        self.player.center_y = C.HEIGHT - 100
+
+        for id, entity in self.combat_mechanic.enemies.items():
+            combat = entity.get_component(Combat)
+            img = combat.img
+            pos = (500 + 10 * id, 80 + 120 * id)
+            if entity == self.combat_mechanic.selected_entity:
+                if not self.combat_mechanic.missed_attack:
+                    pos = (pos[0] + (sin(self.combat_mechanic.reload / 4) * 4), pos[1])
+                else:
+                    pos = (pos[0], pos[1] + (self.combat_mechanic.reload / 2 - 37.5))
+                    self.combat_mechanic.reload -= 5
+
+            pos = pos[0], C.HEIGHT - pos[1]
+            img.center_x = pos[0]
+            img.center_y = pos[1]
+
+        self.combat_mechanic.turn_manager()
+        self.combat_mechanic.combat_check()
+
+        if self.state.state == C.FAILURE_STATE:
+            self.ui_manager.purge_ui_elements()
+            self.window.show_view(Fail(self.state, self.window))
+        elif self.state.state == C.VICTORY_STATE:
+            self.ui_manager.purge_ui_elements()
+            self.window.show_view(Win(self.state, self.combat_mechanic, self.window))
+
+    def on_draw(self):
+        arcade.start_render()
+        arcade.draw_lrwh_rectangle_textured(0, 0, C.WIDTH, C.HEIGHT, self.background_img)
+        self.player.draw()
+        for id, entity in self.combat_mechanic.enemies.items():
+            img = entity.get_component(Combat).img
+            img.draw()
+
+
+class Fail(arcade.View):
+
+    def __init__(self, state, window: arcade.Window):
+        super().__init__(window)
+        self.window = window
+        self.state = state
+        self.background_img = None
+
+    def setup(self):
+        self.background_img = arcade.load_texture(C.RESOURCES + 'Backgrounds/game_over_tr.png')
+
+    def on_show_view(self):
+        self.setup()
+
+    def on_key_press(self, symbol: int, modifiers: int):
+        if symbol == arcade.key.ENTER:
+            self.state.update_state(self.window)
+
+    def on_draw(self):
+        arcade.start_render()
+        arcade.draw_text("Press ENTER to continue", C.WIDTH // 2, 200, arcade.color.WHITE, 25, 300, 'center',
+                         anchor_x='center')
+        arcade.draw_lrwh_rectangle_textured(0, 0, C.WIDTH, C.HEIGHT, self.background_img)
+
+
+class Win(arcade.View):
+
+    def __init__(self, state, XP, window: arcade.Window):
+        super().__init__(window)
+        self.window = window
+        self.state = state
+        self.background_img = None
+        self.combat = XP
+
+    def setup(self):
+        self.background_img = arcade.load_texture(C.RESOURCES + 'Backgrounds/victoire.jpg')
+
+    def on_show_view(self):
+        self.setup()
+
+    def on_key_press(self, symbol: int, modifiers: int):
+        if symbol == arcade.key.ENTER:
+            self.combat.flee = True
+            self.combat.combat_check()
+            self.state.update_state(self.window)
+
+    def on_draw(self):
+        arcade.start_render()
+        arcade.draw_lrwh_rectangle_textured(0, 0, C.WIDTH, C.HEIGHT, self.background_img)
+        arcade.draw_text(str(self.combat.calculate_XP()) + "!!!", C.WIDTH//2, 300, arcade.color.WHITE, 25, 500, 'center', anchor_x='center')
+        arcade.draw_text("Press ENTER to continue", C.WIDTH//2, 200, arcade.color.WHITE, 25, 500, 'center', anchor_x='center')
+

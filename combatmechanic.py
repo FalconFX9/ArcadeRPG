@@ -12,7 +12,7 @@ class CombatMechanic:
     def __init__(self, state):
         self.state = state
         self.enemies = {}
-        self.tour = True
+        self.turn = True
         self.missed_attack = False
         self.selected_entity = None
         self.defeated_enemies = False
@@ -20,13 +20,15 @@ class CombatMechanic:
         self.counter = 0
         self.enemies_num = 0
         self.flee = False
+        self.killed = False
 
     def turns(self):
         self.missed_attack = False
         self.selected_entity = None
-        self.tour = not self.tour
+        self.turn = not self.turn
 
     def attack(self, attacking_entity, selected_entity):
+        self.killed = False
         attack_stat = attacking_entity.get_component(Stats)
         selected_stats = selected_entity.get_component(Stats)
 
@@ -46,7 +48,8 @@ class CombatMechanic:
                 for id, entity in self.enemies.items():
                     if entity == selected_entity:
                         death_id = id
-                        self.enemies.pop(death_id)
+                self.enemies.pop(death_id)
+                self.killed = True
 
     def calculate_XP(self):
         XP_gain = 0
@@ -55,50 +58,46 @@ class CombatMechanic:
             XP_gain += C.XP_GAIN[entity.id] * (1 + (level / 5))
         return XP_gain
 
-    def check_combat(self):
+    def combat_check(self):
         if len(self.enemies) == 0:
             self.defeated_enemies = True
-            if not self.tour:
-                pygame.mixer.music.stop()
-                pygame.mixer.music.reload('ressources\\Musique\\victory.mp3')
-                pygame.mixer.music.play(-1)
-            self.tour = True
+            self.turn = True
             self.state.state = C.VICTORY_STATE
             if self.flee:
                 stats_joueur = self.state.player.get_component(Stats)
                 self.state.state = C.LEVEL_STATE
                 stats_joueur.XP += self.calculate_XP()
-                if stats_joueur.vérifie_niveau():
-                    self.state.player.get_component(Inventory).vérifie_stats()
-                self.state.entités_détruites.append(self.state.combat_launch_entity.id)
+                if stats_joueur.check_level():
+                    self.state.player.get_component(Inventory).check_stats()
+                self.state.destroyed_entities.append(self.state.combat_launch_entity.id)
                 if 'Boss' in self.state.combat_launch_entity.id:
                     self.state.state = C.GAME_END
                 self.state.entities.remove(self.state.combat_launch_entity)
                 self.state.player.get_component(Controllable).force = None
                 self.flee = False
-        elif self.state.bouttons['Flee'].cliqué:
-            pygame.mixer.music.stop()
-            musique = ['Enter the Woods.mp3', 'Nebula.mp3']
-            selected_music = choice(musique)
-            pygame.mixer.music.reload('ressources\\Musique\\' + selected_music)
-            pygame.mixer.music.play(-1)
-            self.state.bouttons['Flee'].cliqué = False
-            self.state.state = C.LEVEL_STATE
-            self.tour = True
-            self.selected_entity = None
-            self.enemies.clear()
-        elif self.state.joueur.get_component(Stats).HP <= 0:
+                """
+                elif self.state.bouttons['Flee'].cliqué:
+                    pygame.mixer.music.stop()
+                    musique = ['Enter the Woods.mp3', 'Nebula.mp3']
+                    selected_music = choice(musique)
+                    pygame.mixer.music.reload('ressources\\Musique\\' + selected_music)
+                    pygame.mixer.music.play(-1)
+                    self.state.bouttons['Flee'].cliqué = False
+                    self.state.state = C.LEVEL_STATE
+                    self.turn = True
+                    self.selected_entity = None
+                    self.enemies.clear()
+                """
+        elif self.state.player.get_component(Stats).HP <= 0:
             self.state.state = C.FAILURE_STATE
-            pygame.mixer.music.stop()
-            pygame.mixer.music.reload('ressources\\Musique\\Game Over.mp3')
-            pygame.mixer.music.play(-1)
             self.enemies.clear()
             self.selected_entity = None
-            self.tour = True
+            self.turn = True
 
     def enemy_turn(self, id):
+        self.selected_entity = None
         if self.reload == C.RELOAD_ANIM:
-            self.attack(self.enemies[id], self.state.joueur)
+            self.attack(self.enemies[id], self.state.player)
             self.reload -= 1
         elif self.reload <= 0:
             self.missed_attack = False
@@ -110,13 +109,14 @@ class CombatMechanic:
     def player_turn(self):
         if self.selected_entity:
             if self.reload == C.RELOAD_ANIM:
-                self.attack(self.state.joueur, self.selected_entity)
+                self.attack(self.state.player, self.selected_entity)
                 self.reload -= 1
             elif self.reload <= 0:
                 self.turns()
                 self.reload = C.RELOAD_ANIM
             else:
                 self.reload -= 1
+        """
         elif self.state.bouttons['Heal'].cliqué:
             if self.reload == C.RELOAD_ANIM:
                 self.healing()
@@ -127,6 +127,7 @@ class CombatMechanic:
                 self.reload = C.RELOAD_ANIM
             else:
                 self.reload -= 1
+        """
 
     def healing(self):
         stats = self.state.joueur.get_component(Stats)
@@ -135,7 +136,7 @@ class CombatMechanic:
             stats.HP = stats.HP_MAX
 
     def turn_manager(self):
-        if self.tour:
+        if self.turn:
             self.check_selected_enemy()
             self.player_turn()
         else:
@@ -157,8 +158,10 @@ class CombatMechanic:
 
     def check_selected_enemy(self):
         counter = 0
+        """
         for button in self.state.bouttons_cible:
             if button.cliqué and counter in self.enemies.keys():
                 self.selected_entity = self.enemies[counter]
                 button.clicked = False
             counter += 1
+        """

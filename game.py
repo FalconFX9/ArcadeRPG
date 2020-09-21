@@ -22,6 +22,7 @@ class Game(arcade.Window):
         self.state.state = C.LEVEL_STATE
         self.map.gstate = self.gstate
         self.gstate.combat_mechanic = CombatMechanic(self.state)
+        self.state.map = self.map
         self.state.entity_factory.combat_mechanic = self.gstate.combat_mechanic
 
 

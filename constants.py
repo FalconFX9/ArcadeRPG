@@ -15,7 +15,7 @@ TITLE = 'Mon jeu'
 WIDTH = 640 #704
 HEIGHT = 480#544
 DRAW_BACKGROUND = (255, 255, 255)
-DT = 1/120
+DT = 1/60
 RESOURCES = resource_path('resources/')
 LAYERS = 2
 TILE_SIZE = 32
@@ -80,13 +80,13 @@ STATS_PER_LEVEL = {
     10: (1400, 9, 140, 2800),
 }
 XP_GAIN = {
-    'Chauve_Souris': 50,
-    'FantomeNoir': 100,
-    'SoldatSquel': 120,
-    'OrbeBleue': 50,
-    'SoldatSombre': 400,
-    'Loup': 150,
-    'Squelette': 90,
-    'Diable': 150,
+    'Bat': 50,
+    'BlackGhost': 100,
+    'SkelSoldier': 120,
+    'BlueOrb': 50,
+    'DarkSoldier': 400,
+    'Wolf': 150,
+    'Skeleton': 90,
+    'Devil': 150,
     'Boss': 1000,
 }

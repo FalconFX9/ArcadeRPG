@@ -20,9 +20,11 @@ class GameState:
 
     def __init__(self):
         self.dt = C.DT
+        self.map = None
         self.state = C.LEVEL_STATE
         self.entity_factory = None
         self.force_update = False
+        self.swicth_to_map = False
 
         self.levels = None
         self.player = None
@@ -219,3 +221,7 @@ class GameState:
 
     def reset_level(self, level_id):
         self.levels[level_id] = copy.deepcopy(self.init_levels[level_id])
+
+    def update_state(self, window):
+        self.state = C.LEVEL_STATE
+        window.show_view(self.map)
