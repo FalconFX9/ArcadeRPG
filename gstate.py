@@ -94,7 +94,7 @@ class GState:
             if orientable.reload > 0:
                 orientable.stop()
 
-        movement.vitesse = 1
+        movement.speed = 1
         if movement.reload is None:
             self.__update_ai_movement(entity)
 
