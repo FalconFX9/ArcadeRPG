@@ -30,7 +30,7 @@ class EntityFactory:
 
     def create_player(self):
         return Entity().add_component(
-            Stats(5, (1, 1, 15, 1)),
+            Stats(5),
             Inventory(),
             Controllable(),
             GridMovement(
